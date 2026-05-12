@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap');
+
+/* ─── Layout base ──────────────────────────────────────────── */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  padding: 0 1.5rem;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+
+  /* Las tres zonas ocupan el ancho completo con flex-grow */
+  gap: 1rem;
+}
+
+/* ─── Logo ─────────────────────────────────────────────────── */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex: 1;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+  color: var(--text-h);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+
+.logo:hover {
+  opacity: 0.7;
+}
+
+.logoMark {
+  color: var(--accent);
+  font-size: 0.65rem;
+  line-height: 1;
+}
+
+/* ─── Breadcrumb ───────────────────────────────────────────── */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 2;
+  gap: 0.25rem;
+  font-size: 0.8125rem; /* 13px */
+  font-weight: 400;
+  color: var(--text);
+}
+
+.crumbGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.separator {
+  color: var(--border);
+  font-size: 1rem;
+  line-height: 1;
+  user-select: none;
+}
+
+.crumbLink {
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.crumbLink:hover {
+  color: var(--accent);
+}
+
+.crumbCurrent {
+  color: var(--text-h);
+  font-weight: 500;
+  /* Truncar si el nombre del producto es muy largo */
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── Carrito ──────────────────────────────────────────────── */
+.cart {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  justify-content: flex-end;
+  color: var(--text-h);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.cart:hover {
+  color: var(--accent);
+}
+
+.cartBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.6875rem; /* 11px */
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Cuando el carrito está vacío, el badge se ve apagado */
+.cartBadgeEmpty {
+  background: var(--border);
+  color: var(--text);
+}
+
+/* Animación al actualizarse el contador */
+.cart:hover .cartBadge {
+  transform: scale(1.15);
+}
