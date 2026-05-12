@@ -1,0 +1,167 @@
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+/* ─── Contenedor de página ───────────────────────────────── */
+.page {
+  padding: 2rem 1.5rem 4rem;
+  min-height: calc(100dvh - 60px); /* 60px = altura del header */
+}
+
+/* ─── Toolbar ────────────────────────────────────────────── */
+.toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.pageTitle {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text-h);
+  margin: 0;
+  line-height: 1;
+}
+
+/* ─── Grid de productos ──────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* ─── Skeleton loading ───────────────────────────────────── */
+.skeleton {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.skeletonImage {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(
+    90deg,
+    var(--border) 0%,
+    #f0f0f0 40%,
+    var(--border) 80%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+.skeletonBody {
+  padding: 0.875rem 1rem 1rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.skeletonLine {
+  height: 12px;
+  border-radius: 4px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--border) 0%,
+    #f0f0f0 40%,
+    var(--border) 80%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+.skeletonLineSm { width: 65%; animation-delay: 0.1s; }
+.skeletonLineXs { width: 35%; animation-delay: 0.2s; }
+
+/* ─── Estado vacío ───────────────────────────────────────── */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 6rem 2rem;
+  text-align: center;
+  color: var(--text);
+}
+
+.emptyIcon {
+  font-size: 2.5rem;
+  line-height: 1;
+  opacity: 0.3;
+  margin-bottom: 0.5rem;
+}
+
+.emptyTitle {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-h);
+  margin: 0;
+}
+
+.emptyHint {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* ─── Estado de error ────────────────────────────────────── */
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 6rem 2rem;
+  text-align: center;
+}
+
+.errorIcon {
+  font-size: 2rem;
+  opacity: 0.4;
+}
+
+.errorTitle {
+  font-size: 0.9375rem;
+  color: var(--text-h);
+  margin: 0;
+}
+
+.retryBtn {
+  margin-top: 0.25rem;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--accent-border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--accent);
+  font-size: 0.875rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.retryBtn:hover {
+  background: var(--accent-bg);
+}
