@@ -1,28 +1,51 @@
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import PropTypes from 'prop-types'
 import styles from './ProductCard.module.css'
 
-export function ProductCard({ id, brand, model, price, imgUrl, style }) {
+// Variantes compartidas — el padre las activa con staggerChildren
+export const cardVariants = {
+  hidden: { opacity: 0, y: 24, scale: 0.97 },
+  show: (i) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      delay: i * 0.04,
+      type: 'spring',
+      stiffness: 280,
+      damping: 22,
+    },
+  }),
+  exit: {
+    opacity: 0,
+    scale: 0.94,
+    transition: { duration: 0.15, ease: 'easeIn' },
+  },
+}
+
+export function ProductCard({ id, brand, model, price, imgUrl, index }) {
   const navigate = useNavigate()
 
-  const handleClick = () => navigate(`/product/${id}`)
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' || e.key === ' ') handleClick()
-  }
-
-  // Formatea el precio: si es número lo fija a 2 decimales, si no lo muestra tal cual
   const formattedPrice =
     typeof price === 'number' ? price.toFixed(2) : price
 
   return (
-    <article
+    <motion.article
       className={styles.card}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
+      variants={cardVariants}
+      initial="hidden"
+      animate="show"
+      exit="exit"
+      custom={index}
+      layout
+      whileHover={{ y: -6, transition: { type: 'spring', stiffness: 400, damping: 20 } }}
+      whileTap={{ scale: 0.97 }}
+      onClick={() => navigate(`/product/${id}`)}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate(`/product/${id}`) }}
       role="button"
       tabIndex={0}
       aria-label={`${brand} ${model}, ${formattedPrice} €`}
-      style={style}
     >
       <div className={styles.imageWrapper}>
         <img
@@ -30,7 +53,6 @@ export function ProductCard({ id, brand, model, price, imgUrl, style }) {
           alt={`${brand} ${model}`}
           className={styles.image}
           loading="lazy"
-          // Fallback silencioso si la imagen no carga
           onError={(e) => { e.currentTarget.style.opacity = '0' }}
         />
       </div>
@@ -40,7 +62,7 @@ export function ProductCard({ id, brand, model, price, imgUrl, style }) {
         <span className={styles.model}>{model}</span>
         <span className={styles.price}>{formattedPrice} €</span>
       </div>
-    </article>
+    </motion.article>
   )
 }
 
@@ -50,7 +72,7 @@ ProductCard.propTypes = {
   model: PropTypes.string.isRequired,
   price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   imgUrl: PropTypes.string,
-  style: PropTypes.object,
+  index: PropTypes.number,
 }
 
 export default ProductCard

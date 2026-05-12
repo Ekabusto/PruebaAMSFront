@@ -1,5 +1,6 @@
 import { useReducer, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Header } from '../../components/Header/Header'
 import { SearchBar } from '../../components/SearchBar/SearchBar'
 import { ProductCard } from '../../components/ProductCard/ProductCard'
@@ -31,11 +32,17 @@ function LoadingGrid() {
 // ─── Estado vacío ──────────────────────────────────────────
 function EmptyState({ query }) {
   return (
-    <div className={styles.empty}>
+    <motion.div
+      className={styles.empty}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.2 }}
+    >
       <span className={styles.emptyIcon}>◎</span>
       <p className={styles.emptyTitle}>Sin resultados para &ldquo;{query}&rdquo;</p>
       <p className={styles.emptyHint}>Prueba con otra marca o modelo</p>
-    </div>
+    </motion.div>
   )
 }
 
@@ -61,8 +68,6 @@ ErrorState.propTypes = {
 }
 
 // ─── Reducer para el estado de la petición ────────────────
-// Agrupa loading/error/products en un solo dispatch, evitando
-// múltiples re-renders y la restricción de setState en efectos
 const initialFetchState = { products: [], loading: true, error: null }
 
 function fetchReducer(state, action) {
@@ -78,7 +83,6 @@ function fetchReducer(state, action) {
 function ProductListPage() {
   const [{ products, loading, error }, dispatch] = useReducer(fetchReducer, initialFetchState)
   const [query, setQuery] = useState('')
-  // fetchKey actúa como disparador: incrementarlo fuerza una nueva llamada a la API
   const [fetchKey, setFetchKey] = useState(0)
 
   useEffect(() => {
@@ -89,14 +93,11 @@ function ProductListPage() {
       .then((data) => { if (!cancelled) dispatch({ type: 'success', data }) })
       .catch((err) => { if (!cancelled) dispatch({ type: 'error', message: err.message }) })
 
-    // Limpieza: si el componente se desmonta antes de que acabe el fetch,
-    // ignoramos la respuesta para no actualizar estado en un componente muerto
     return () => { cancelled = true }
   }, [fetchKey])
 
   const handleRetry = () => setFetchKey((k) => k + 1)
 
-  // Filtra por marca O modelo, sin distinción de mayúsculas ni espacios sobrantes
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) return products
@@ -113,13 +114,27 @@ function ProductListPage() {
 
       <main className={styles.page}>
         <div className={styles.toolbar}>
-          <h1 className={styles.pageTitle}>Catálogo</h1>
+          <motion.h1
+            className={styles.pageTitle}
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+          >
+            Catálogo
+          </motion.h1>
+
           {!loading && !error && (
-            <SearchBar
-              value={query}
-              onChange={setQuery}
-              resultCount={filtered.length}
-            />
+            <motion.div
+              initial={{ opacity: 0, x: 16 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 28, delay: 0.05 }}
+            >
+              <SearchBar
+                value={query}
+                onChange={setQuery}
+                resultCount={filtered.length}
+              />
+            </motion.div>
           )}
         </div>
 
@@ -127,23 +142,29 @@ function ProductListPage() {
 
         {!loading && error && <ErrorState onRetry={handleRetry} />}
 
-        {!loading && !error && filtered.length === 0 && query && (
-          <EmptyState query={query} />
-        )}
+        <AnimatePresence mode="wait">
+          {!loading && !error && filtered.length === 0 && query && (
+            <EmptyState key="empty" query={query} />
+          )}
+        </AnimatePresence>
 
+        {/* mode="popLayout": las cards que desaparecen al filtrar animan su salida
+            mientras las restantes se recolocan fluidamente con layout */}
         {!loading && !error && filtered.length > 0 && (
           <div className={styles.grid}>
-            {filtered.map((product, i) => (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                brand={product.brand}
-                model={product.model}
-                price={product.price}
-                imgUrl={product.imgUrl}
-                style={{ '--delay': `${i * 40}ms` }}
-              />
-            ))}
+            <AnimatePresence mode="popLayout">
+              {filtered.map((product, i) => (
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  brand={product.brand}
+                  model={product.model}
+                  price={product.price}
+                  imgUrl={product.imgUrl}
+                  index={i}
+                />
+              ))}
+            </AnimatePresence>
           </div>
         )}
       </main>

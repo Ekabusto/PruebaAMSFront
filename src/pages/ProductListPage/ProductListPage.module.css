@@ -1,12 +1,12 @@
 @keyframes shimmer {
-  0%   { background-position: -400px 0; }
-  100% { background-position:  400px 0; }
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
 }
 
 /* ─── Contenedor de página ───────────────────────────────── */
 .page {
   padding: 2rem 1.5rem 4rem;
-  min-height: calc(100dvh - 60px); /* 60px = altura del header */
+  min-height: calc(100dvh - 60px);
 }
 
 /* ─── Toolbar ────────────────────────────────────────────── */
@@ -20,9 +20,9 @@
 
 .pageTitle {
   font-family: 'Syne', sans-serif;
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 800;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.05em;
   color: var(--text-h);
   margin: 0;
   line-height: 1;
@@ -36,27 +36,20 @@
 }
 
 @media (max-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 480px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .toolbar {
-    flex-direction: column;
-    align-items: stretch;
-  }
+  .grid { grid-template-columns: 1fr; }
+  .toolbar { flex-direction: column; align-items: stretch; }
 }
 
-/* ─── Skeleton loading ───────────────────────────────────── */
+/* ─── Skeleton loading — adaptado al tema oscuro ─────────── */
 .skeleton {
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
+  background: var(--bg);
 }
 
 .skeletonImage {
@@ -64,12 +57,12 @@
   aspect-ratio: 3 / 4;
   background: linear-gradient(
     90deg,
-    var(--border) 0%,
-    #f0f0f0 40%,
-    var(--border) 80%
+    #1a1a22 0%,
+    #252530 45%,
+    #1a1a22 90%
   );
-  background-size: 800px 100%;
-  animation: shimmer 1.4s ease infinite;
+  background-size: 1200px 100%;
+  animation: shimmer 1.6s ease infinite;
 }
 
 .skeletonBody {
@@ -81,21 +74,21 @@
 }
 
 .skeletonLine {
-  height: 12px;
+  height: 11px;
   border-radius: 4px;
   width: 100%;
   background: linear-gradient(
     90deg,
-    var(--border) 0%,
-    #f0f0f0 40%,
-    var(--border) 80%
+    #1e1e28 0%,
+    #2a2a38 45%,
+    #1e1e28 90%
   );
-  background-size: 800px 100%;
-  animation: shimmer 1.4s ease infinite;
+  background-size: 1200px 100%;
+  animation: shimmer 1.6s ease infinite;
 }
 
-.skeletonLineSm { width: 65%; animation-delay: 0.1s; }
-.skeletonLineXs { width: 35%; animation-delay: 0.2s; }
+.skeletonLineSm { width: 62%; animation-delay: 0.12s; }
+.skeletonLineXs { width: 32%; animation-delay: 0.24s; }
 
 /* ─── Estado vacío ───────────────────────────────────────── */
 .empty {
@@ -112,7 +105,7 @@
 .emptyIcon {
   font-size: 2.5rem;
   line-height: 1;
-  opacity: 0.3;
+  opacity: 0.25;
   margin-bottom: 0.5rem;
 }
 
@@ -138,10 +131,7 @@
   text-align: center;
 }
 
-.errorIcon {
-  font-size: 2rem;
-  opacity: 0.4;
-}
+.errorIcon { font-size: 2rem; opacity: 0.35; }
 
 .errorTitle {
   font-size: 0.9375rem;
@@ -159,9 +149,10 @@
   font-size: 0.875rem;
   font-family: inherit;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, box-shadow 0.15s;
 }
 
 .retryBtn:hover {
   background: var(--accent-bg);
+  box-shadow: 0 0 12px var(--accent-bg);
 }
