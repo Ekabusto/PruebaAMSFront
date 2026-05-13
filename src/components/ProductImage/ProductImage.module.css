@@ -1,0 +1,31 @@
+.wrapper {
+  position: sticky;
+  top: calc(60px + 2rem); /* se queda fija al hacer scroll, bajo el header */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #18181f 0%, #0f0f14 100%);
+  border: 1px solid var(--border);
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+/* Aureola de color tras el producto */
+.glow {
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(170, 59, 255, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.image {
+  position: relative;
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  z-index: 1; /* encima del glow */
+  filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.5));
+}
