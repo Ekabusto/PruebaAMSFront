@@ -1,16 +1,29 @@
-# React + Vite
+# AMS Phone Store
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Prueba técnica frontend — SPA para buscar y comprar móviles.
 
-Currently, two official plugins are available:
+## Cómo arrancarlo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm start        # servidor de desarrollo en localhost:5173
+npm run build    # build de producción
+npm test         # tests
+npm run lint     # linting
+```
 
-## React Compiler
+No hace falta ninguna variable de entorno. La URL de la API está directamente en `src/services/api.js`.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Stack
 
-## Expanding the ESLint configuration
+React 18 con Vite, React Router v6, CSS Modules y Framer Motion para las animaciones. Tests con Vitest y @testing-library/react.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Notas para el revisor
+
+La caché guarda la respuesta en localStorage junto a un timestamp. Si ha pasado más de una hora, la siguiente petición va a red y reemplaza la entrada. `addToCart()` nunca se cachea porque es una mutación.
+
+El contador del carrito también vive en localStorage. Cuando el POST tiene éxito, `ProductActions` actualiza ese valor y lanza un evento custom `cartUpdated` en el DOM; el `Header` lo escucha y se actualiza. Decidí no meter Context ni estado global para una sola cifra, me parecia too much.
+
+El estado de las peticiones en `ProductListPage` y `ProductDetailPage` lo manejo con `useReducer` en vez de varios `useState` sueltos. Básicamente porque varios `setState` dentro de un efecto pueden dar lugar a renders intermedios raros, y además ESLint se queja con `react-hooks/exhaustive-deps` y esta fue la forma de solventarlo.
+
+Los tests que cubren componentes con animaciones mockean Framer Motion con `vi.mock`, reemplazando `motion.*` por elementos HTML normales. Sin eso los tests dependen del ciclo de animación y son frágiles, en mi experiencia esta era supuestamente la forma de hacerlo.
